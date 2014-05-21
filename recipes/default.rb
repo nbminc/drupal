@@ -322,6 +322,12 @@ node[:drupal][:sites].each do |site_name, site|
         set -e
         #{cmd}
       EOH
+
+      bash 'change file ownership' do
+          code <<-EOH
+            /root/#{site_name}-files.sh
+          EOH
+        end
     end
 
     bash "drush-site-update-#{site_name}" do
