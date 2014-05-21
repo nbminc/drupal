@@ -163,7 +163,7 @@ node[:drupal][:sites].each do |site_name, site|
             if site[:drush_make][:template] == true
               cmd = 'drush make build.make -y'
             else
-              cmd = "drush make #{site[:drush_make][:files][:default]} -y"
+              cmd = "drush make #{site[:drush_make][:files][:default]} --working-copy -y"
             end
             code <<-EOH
               set -x
@@ -172,7 +172,7 @@ node[:drupal][:sites].each do |site_name, site|
             EOH
           end
 
-          bash "Remove make files from #{site_name} directory" do
+=begin          bash "Remove make files from #{site_name} directory" do
             user 'root'
             cwd release_path
             cmd = "rm -rf #{make_files}"
@@ -181,7 +181,7 @@ node[:drupal][:sites].each do |site_name, site|
               set -e
               #{cmd}
             EOH
-          end
+=end          end
 
         end
 
@@ -287,7 +287,7 @@ node[:drupal][:sites].each do |site_name, site|
           only_if { site.has_key?("drush_make") && !site[:drush_make][:files].nil? }
           user 'root'
           cwd "#{node[:drupal][:server][:base]}/#{site_name}/current"
-          cmd = "mv .git profiles/#{site[:drupal][:settings][:profile]}"
+          cmd = "rm -rf .git"
           code <<-EOH
             set -x
             set -e
