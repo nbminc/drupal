@@ -313,12 +313,10 @@ node[:drupal][:sites].each do |site_name, site|
         end
       end
 
-      bash 'change file ownership' do
-          code <<-EOH
-            /root/#{site_name}-files.sh
-          EOH
-      end
-
+      code <<-EOH
+        /root/#{site_name}-files.sh
+      EOH
+      
       cmd << " --account-name=#{drupal_user['admin_user']} --account-pass=#{drupal_user['admin_pass']}"
       only_if { site[:deploy][:action].any? { |action| action == 'install' } }
 
